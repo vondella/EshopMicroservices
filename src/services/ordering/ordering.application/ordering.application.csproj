@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\buildingBlock\buildingBlock.Messaging\buildingBlock.Messaging.csproj" />
+    <ProjectReference Include="..\..\..\buildingBlock\buildingBlock\buildingBlock.csproj" />
+    <ProjectReference Include="..\ordering.domain\ordering.domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
+  </ItemGroup>
+
+</Project>
