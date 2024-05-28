@@ -4,6 +4,7 @@ using buildingBlock.Messaging.MassTransit;
 using discount.Grpc.Protos;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,10 +53,20 @@ builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(
 ;
 builder.Services.AddMessageBroker(builder.Configuration);
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
-
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.Authority = "http://localhost:7001";
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateAudience = false
+        };
+    });
 var app = builder.Build();
 
 //app.MapGet("/", () => "Hello World!");
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapCarter();
 app.UseExceptionHandler(option => { });
 app.UseHealthChecks("/health", new HealthCheckOptions

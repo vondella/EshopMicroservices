@@ -33,7 +33,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ordering.application", "ser
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ordering.infrastracture", "services\ordering\ordering.infrastracture\ordering.infrastracture.csproj", "{D7EFE454-1E0C-4717-8498-A98FAFF84CCD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "buildingBlock.Messaging", "buildingBlock\buildingBlock.Messaging\buildingBlock.Messaging.csproj", "{CCF69276-D144-47EA-8937-315C1EF8AAF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "buildingBlock.Messaging", "buildingBlock\buildingBlock.Messaging\buildingBlock.Messaging.csproj", "{CCF69276-D144-47EA-8937-315C1EF8AAF4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateways", "ApiGateways", "{807C875C-F873-4973-8678-2D5A7ABDC7DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YarpApiGateway", "ApiGateways\YarpApiGateway\YarpApiGateway.csproj", "{477FDCF3-5EF3-4909-A9C0-FFB4A644024B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityServer", "IdentityServer", "{D82412DA-8A35-49E9-BAA2-F87449158D39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "identityServer", "services\IdentityServer\identityServer\identityServer.csproj", "{E92B12C2-0F6B-421F-8FAA-0ADADCFD6583}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +89,14 @@ Global
 		{CCF69276-D144-47EA-8937-315C1EF8AAF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCF69276-D144-47EA-8937-315C1EF8AAF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCF69276-D144-47EA-8937-315C1EF8AAF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{477FDCF3-5EF3-4909-A9C0-FFB4A644024B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{477FDCF3-5EF3-4909-A9C0-FFB4A644024B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{477FDCF3-5EF3-4909-A9C0-FFB4A644024B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{477FDCF3-5EF3-4909-A9C0-FFB4A644024B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E92B12C2-0F6B-421F-8FAA-0ADADCFD6583}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E92B12C2-0F6B-421F-8FAA-0ADADCFD6583}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E92B12C2-0F6B-421F-8FAA-0ADADCFD6583}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E92B12C2-0F6B-421F-8FAA-0ADADCFD6583}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -99,6 +115,9 @@ Global
 		{29A66C16-3E56-4F20-834A-CCEBB9D56AA2} = {C82585F6-CFF8-4D9B-AE2F-1B9D16AC119A}
 		{D7EFE454-1E0C-4717-8498-A98FAFF84CCD} = {C82585F6-CFF8-4D9B-AE2F-1B9D16AC119A}
 		{CCF69276-D144-47EA-8937-315C1EF8AAF4} = {FF044E8E-B7CC-42AD-A21F-C07E1B9BEF0B}
+		{477FDCF3-5EF3-4909-A9C0-FFB4A644024B} = {807C875C-F873-4973-8678-2D5A7ABDC7DC}
+		{D82412DA-8A35-49E9-BAA2-F87449158D39} = {F666B656-5500-4509-924A-4CC970669D6B}
+		{E92B12C2-0F6B-421F-8FAA-0ADADCFD6583} = {D82412DA-8A35-49E9-BAA2-F87449158D39}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EE8CFE17-CBD6-4A6B-9D8D-C405756C4C57}
