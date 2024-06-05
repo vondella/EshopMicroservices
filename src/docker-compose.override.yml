@@ -28,6 +28,15 @@ services:
     ports:
       - "1433:1433"
 
+  authdb:
+    container_name: authdb
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=V0ndella21
+    restart: always
+    ports:
+      - "1434:1433"
+
   messagebroker:
     container_name: messagebroker
     hostname: ecomerce-mq
@@ -102,7 +111,6 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
       - ConnectionStrings__Database=Server=orderdb;Database=orderDb;User Id=sa;Password=V0ndella21;Encrypt=false;TrustServerCertificate=True
       - MessageBroker__Host=amqp://ecomerce-mq:5672
       - MessageBroker__UserName=guest
@@ -117,3 +125,28 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  elasticsearch:
+    container_name: elasticsearch
+    restart: always
+    environment:
+      - xpack.monitoring.enabled=true
+      - xpack.watcher.enabled=false
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+
+
+  kibana:
+    container_name: kibana
+    restart: always
+    environment:
+      - ELASTICSEARCH_HOSTS=http://localhost:9200   
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch  

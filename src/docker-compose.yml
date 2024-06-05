@@ -15,6 +15,9 @@ services:
   orderdb:
     image: mcr.microsoft.com/mssql/server
 
+  authdb:
+    image: mcr.microsoft.com/mssql/server
+
   catalogapi:
     image: ${DOCKER_REGISTRY-}catalogapi
     build:
@@ -37,10 +40,17 @@ services:
     build:
       context: .
       dockerfile: services/ordering/OrderingApi/Dockerfile
+  
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.2
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.13.4
 
 volumes:
   postgres_catalog:
   postgres_basket:
+  elasticsearch-data:
     
 
 
