@@ -1,11 +1,4 @@
 
-using buildingBlock.Exceptions.Handler;
-using buildingBlock.Messaging.MassTransit;
-using discount.Grpc.Protos;
-using HealthChecks.UI.Client;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.IdentityModel.Tokens;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Application services
@@ -41,16 +34,8 @@ builder.Services.AddHealthChecks()
 builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(option =>
 {
     option.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]!);
-})
-//    .ConfigurePrimaryHttpMessageHandler(() =>
-//{
-//    var handler = new HttpClientHandler
-//    {
-//        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-//    };
-//    return handler;
-//})
-;
+});
+
 builder.Services.AddMessageBroker(builder.Configuration);
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 builder.Services.AddAuthentication("Bearer")

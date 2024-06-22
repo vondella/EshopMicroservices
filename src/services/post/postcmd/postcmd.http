@@ -1,0 +1,6 @@
+@postcmd_HostAddress = http://localhost:5201
+
+GET {{postcmd_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -19,6 +19,17 @@ services:
     ports:
       - "6379:6379"
   
+  mongo:
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    # environment:
+    #   MONGO_INITDB_ROOT_USERNAME: vondella
+    #   MONGO_INITDB_ROOT_PASSWORD: V0ndella21
+    volumes:
+      - ./db_data/:/data/db/
+
   orderdb:
     container_name: orderdb
     environment:
@@ -36,6 +47,17 @@ services:
     restart: always
     ports:
       - "1434:1433"
+  
+  socialdb:
+    container_name: socialdb
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Str0ngs@Passw0rd21
+    restart: always
+    ports:
+      - "1435:1433"
+    # volumes:
+    #   - mssql_data:/var/opt/mssql/data
 
   messagebroker:
     container_name: messagebroker
@@ -47,6 +69,7 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+      
 
   basketdb:
      container_name: basketdb
