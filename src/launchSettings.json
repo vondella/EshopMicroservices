@@ -9,7 +9,9 @@
         "discount.grpc": "StartDebugging",
         "orderingapi": "StartDebugging",
         "play.catalog.client": "StartDebugging",
-        "play.identity.service": "StartDebugging"
+        "play.identity.service": "StartDebugging",
+        "play.inventory.client": "StartDebugging",
+        "play.trading": "StartDebugging"
       }
     }
   }

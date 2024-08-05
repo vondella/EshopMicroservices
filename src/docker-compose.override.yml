@@ -205,15 +205,19 @@ services:
       - ASPNETCORE_HTTP_PORTS=8080
       - MongoConfig__ConnectionString=mongodb://mongocatalog:27017
       - MongoConfig__Database=catalog
-      - MongoConfig__Database=Collection
+      - MongoConfig__Collection=items
       - MessageBroker__Host=amqp://ecomerce-mq:5672
       - MessageBroker__UserName=guest
       - MessageBroker__Password=guest
+      - ServiceSettings__ServiceName=catalog
+      - ServiceSettings__Authority=http://play.identity.service:9002
     depends_on:
       - messagebroker
       - mongocatalog
+      - play.identity.service
     ports:
-      - "9003:9003"
+      - "9003:8080"
+      - "7003:8080"
 
 
   play.identity.service:
@@ -233,7 +237,46 @@ services:
     depends_on:
       - messagebroker
       - mongocatalog
+      
     ports:
-      - "9002:9002"
+      - "9002:8080"
+      - "7002:8080"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+
+  play.inventory.client:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - MongoConfig__ConnectionString=mongodb://mongocatalog:27017
+      - MongoConfig__Collection=inventoryitems
+      - MongoConfig__Database=inventory
+      - MessageBroker__Host=amqp://ecomerce-mq:5672
+      - MessageBroker__UserName=guest
+      - MessageBroker__Password=guest
+      - ServiceSettings__ServiceName=trading
+      - ServiceSettings__Authority=http://play.identity.service:9002
+
+    ports:
+      - "9004:8080"
+      - "7004:8080"
+
+
+  play.trading:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - MongoConfig__ConnectionString=mongodb://mongocatalog:27017
+      - MongoConfig__Collection=purchaseStateMachine
+      - MongoConfig__Database=trading
+      - MessageBroker__Host=amqp://ecomerce-mq:5672
+      - MessageBroker__UserName=guest
+      - MessageBroker__Password=guest
+      - ServiceSettings__ServiceName=trading
+      - ServiceSettings__Authority=http://play.identity.service:9002
+
+    ports:
+      - "9005:8080"
+      - "7005:8080"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro

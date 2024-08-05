@@ -74,6 +74,18 @@ services:
       context: .
       dockerfile: Play.Catalog/Play.Identity.Service/Dockerfile
 
+  play.inventory.client:
+    image: ${DOCKER_REGISTRY-}playinventoryclient
+    build:
+      context: .
+      dockerfile: Play.Catalog/Play.Inventory.Client/Dockerfile
+
+  play.trading:
+    image: ${DOCKER_REGISTRY-}playtrading
+    build:
+      context: .
+      dockerfile: Play.Catalog/Play.Trading/Dockerfile
+
 volumes:
   postgres_catalog:
   postgres_basket:
@@ -83,6 +95,8 @@ volumes:
   mongogrpcdata:
   # mssql_data:
     
+
+
 
 
 
