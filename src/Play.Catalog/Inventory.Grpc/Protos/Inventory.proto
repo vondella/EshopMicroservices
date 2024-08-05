@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+option csharp_namespace = "Inventory.Grpc";
+
+package InventoryItems;
+
+// The greeting service definition.
+service InventoryItemService {
+  // Sends a greeting
+  rpc CreateInvetory (CreateInventoryRequest) returns (CreateInventoryResponse);
+  rpc GetInvetory (GetInventoryRequest) returns (GetInventoryResponse);
+}
+
+// The request message containing the user's name.
+message CreateInventoryRequest {
+  string  UserId = 1;
+  string CatalogItemId=2;
+  int32 Quantity=3;
+}
+
+// The response message containing the greetings.
+message CreateInventoryResponse {
+  string Id = 1;
+}
+message GetInventoryRequest{
+  string UserId = 1;
+}
+message Inventory {
+  string Id = 1;
+  string CatalogItemId=2;
+  int32 Quantity=3;
+  string AcquiredDate=4;
+  string UserId=5;
+}
+
+message InventoryCatalog {
+  string Id = 1;
+  string Name=2;
+  string Description=3;
+}
+message GetInventoryResponse{
+  repeated Inventory Inventories=1;
+}

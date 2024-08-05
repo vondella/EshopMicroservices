@@ -1,0 +1,6 @@
+@Play.Catalog.Client_HostAddress = http://localhost:5266
+
+GET {{Play.Catalog.Client_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

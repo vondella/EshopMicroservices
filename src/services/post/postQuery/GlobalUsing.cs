@@ -16,6 +16,8 @@ global using posQuery.Infrastracture.Repository;
 global using posQuery.Converters;
 global using postQuery;
 global using System.Reflection;
+global using Carter;
+global using MediatR;
 
 
 

@@ -23,12 +23,28 @@ services:
     container_name: mongo
     restart: always
     ports:
-      - "27017:27017"
-    # environment:
-    #   MONGO_INITDB_ROOT_USERNAME: vondella
-    #   MONGO_INITDB_ROOT_PASSWORD: V0ndella21
+      - "27018:27017"
+ 
     volumes:
       - ./db_data/:/data/db/
+
+  mongocatalog:
+    container_name: mongocatalog
+    restart: always
+    ports:
+      - "27019:27017"
+  
+    volumes:
+      - mongodata:/data/db/
+
+  mongogrpc:
+    container_name: mongogrpc
+    restart: always
+    ports:
+      - "27020:27017"
+
+    volumes:
+      - mongogrpcdata:/data/db/
 
   orderdb:
     container_name: orderdb
@@ -56,8 +72,7 @@ services:
     restart: always
     ports:
       - "1435:1433"
-    # volumes:
-    #   - mssql_data:/var/opt/mssql/data
+  
 
   messagebroker:
     container_name: messagebroker
@@ -84,92 +99,141 @@ services:
      volumes:
         - postgres_basket:/var/lib/postgresql/data/
  
-  catalogapi:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-      # - ASPNETCORE_HTTPS_PORTS=8081
-      - ConnectionStrings__Databse=Server=catalogdb;Port=5432;Database=catalogdb;User Id=postgres;Password=postgres;Include Error Detail=true
-    depends_on:
-     - catalogdb
-    ports:
-      - "6000:8080"
-      - "6060:8081"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
-  basketapi:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ConnectionStrings__Database=Server=basketdb;Port=5433;Database=basketdb; User Id=postgres;Password=postgres;Include Error Detail=true
-      - ConnectionStrings__Redis=distributedcache:6379
-      - GrpcSettings__DiscountUrl=http://discount.grpc:8080
-      - MessageBroker__Host=messagebroker:5672
-      - MessageBroker__UserName=guest
-      - MessageBroker__Password=guest
-    depends_on:
-      - basketdb
-      - distributedcache
-      - discount.grpc
-      - messagebroker
-    ports:
-      - "6001:8080"
+
+  socialPostgresdb:
+     container_name: socialPostgresdb
+     environment:
+       - POSTGRES_USER=postgres
+       - POSTGRES_PASSWORD=postgresPsw
+       - POSTGRES_DB=socialdb
+
+     restart: always
+     ports:
+        - "5434:5432"
+     volumes:
+        - postgres_social:/var/lib/postgresql/data/
+ 
+  # catalogapi:
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #     - ASPNETCORE_HTTP_PORTS=8080
+  #     - ConnectionStrings__Databse=Server=catalogdb;Port=5432;Database=catalogdb;User Id=postgres;Password=postgres;Include Error Detail=true
+  #   depends_on:
+  #    - catalogdb
+  #   ports:
+  #     - "6000:8080"
+  #     - "6060:8081"
+  #   volumes:
+  #     - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+  #     - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+  # basketapi:
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #     - ASPNETCORE_HTTP_PORTS=8080
+  #     - ConnectionStrings__Database=Server=basketdb;Port=5433;Database=basketdb; User Id=postgres;Password=postgres;Include Error Detail=true
+  #     - ConnectionStrings__Redis=distributedcache:6379
+  #     - GrpcSettings__DiscountUrl=http://discount.grpc:8080
+  #     - MessageBroker__Host=messagebroker:5672
+  #     - MessageBroker__UserName=guest
+  #     - MessageBroker__Password=guest
+  #   depends_on:
+  #     - basketdb
+  #     - distributedcache
+  #     - discount.grpc
+  #     - messagebroker
+  #   ports:
+  #     - "6001:8080"
 
 
-  discount.grpc:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-      # - ASPNETCORE_HTTPS_PORTS=8081
-      - ConnectionStrings__Database=Data Source=discountdb
-    ports:
-      - "6002:8080"
-      # - "6062:8081"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+  # discount.grpc:
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #     - ASPNETCORE_HTTP_PORTS=8080
+  #     - ConnectionStrings__Database=Data Source=discountdb
+  #   ports:
+  #     - "6002:8080"
+  #   volumes:
+  #     - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+  #     - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
 
-  orderingapi:
+  # orderingapi:
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #     - ASPNETCORE_HTTP_PORTS=8080
+  #     - ConnectionStrings__Database=Server=orderdb;Database=orderDb;User Id=sa;Password=V0ndella21;Encrypt=false;TrustServerCertificate=True
+  #     - MessageBroker__Host=amqp://ecomerce-mq:5672
+  #     - MessageBroker__UserName=guest
+  #     - MessageBroker__Password=guest
+  #     - FeatureManagement__OrderFullfilment=false
+  #   depends_on:
+  #     - messagebroker
+  #     - orderdb
+  #   ports:
+  #     - "6003:8080"
+  #     - "6004:8081"
+  #   volumes:
+  #     - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+  #     - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  # elasticsearch:
+  #   container_name: elasticsearch
+  #   restart: always
+  #   environment:
+  #     - xpack.monitoring.enabled=true
+  #     - xpack.watcher.enabled=false
+  #     - xpack.security.enabled=false
+  #     - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  #     - discovery.type=single-node
+  #   ports:
+  #     - "9200:9200"
+  #   volumes:
+  #     - elasticsearch-data:/usr/share/elasticsearch/data
+
+
+  # kibana:
+  #   container_name: kibana
+  #   restart: always
+  #   environment:
+  #     - ELASTICSEARCH_HOSTS=http://localhost:9200   
+  #   ports:
+  #     - "5601:5601"
+  #   depends_on:
+  #     - elasticsearch  
+  play.catalog.client:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
-      - ConnectionStrings__Database=Server=orderdb;Database=orderDb;User Id=sa;Password=V0ndella21;Encrypt=false;TrustServerCertificate=True
+      - MongoConfig__ConnectionString=mongodb://mongocatalog:27017
+      - MongoConfig__Database=catalog
+      - MongoConfig__Database=Collection
       - MessageBroker__Host=amqp://ecomerce-mq:5672
       - MessageBroker__UserName=guest
       - MessageBroker__Password=guest
-      - FeatureManagement__OrderFullfilment=false
     depends_on:
       - messagebroker
-      - orderdb
+      - mongocatalog
     ports:
-      - "6003:8080"
-      - "6004:8081"
+      - "9003:9003"
+
+
+  play.identity.service:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - MongoConfig__ConnectionString=mongodb://mongocatalog:27017
+      - MongoConfig__Collection=items
+      - MongoConfig__Database=Identity
+      - MessageBroker__Host=amqp://ecomerce-mq:5672
+      - MessageBroker__UserName=guest
+      - MessageBroker__Password=guest
+      - ServiceSettings__ServiceName=Identity
+      - IdentitySettings__AdminUserEmail=admin@play.com
+      - IdentitySettings__StartingGil=100
+      - IdentitySettings__AdminUserPassword=Pass@word1
+    depends_on:
+      - messagebroker
+      - mongocatalog
+    ports:
+      - "9002:9002"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
-
-  elasticsearch:
-    container_name: elasticsearch
-    restart: always
-    environment:
-      - xpack.monitoring.enabled=true
-      - xpack.watcher.enabled=false
-      - xpack.security.enabled=false
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - discovery.type=single-node
-    ports:
-      - "9200:9200"
-    volumes:
-      - elasticsearch-data:/usr/share/elasticsearch/data
-
-
-  kibana:
-    container_name: kibana
-    restart: always
-    environment:
-      - ELASTICSEARCH_HOSTS=http://localhost:9200   
-    ports:
-      - "5601:5601"
-    depends_on:
-      - elasticsearch  

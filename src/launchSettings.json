@@ -7,7 +7,9 @@
         "catalogapi": "StartDebugging",
         "basketapi": "StartDebugging",
         "discount.grpc": "StartDebugging",
-        "orderingapi": "StartDebugging"
+        "orderingapi": "StartDebugging",
+        "play.catalog.client": "StartDebugging",
+        "play.identity.service": "StartDebugging"
       }
     }
   }

@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
+    <UserSecretsId>be1c99eb-658a-48ae-bd3d-29eb78d85bf2</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Carter" Version="8.2.1" />
+    <PackageReference Include="MassTransit" Version="8.2.3" />
+    <PackageReference Include="MassTransit.MongoDb" Version="8.2.3" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\buildingBlock\buildingBlock.Messaging\buildingBlock.Messaging.csproj" />
+    <ProjectReference Include="..\..\buildingBlock\buildingBlock\buildingBlock.csproj" />
+    <ProjectReference Include="..\Play.Catalog.Contracts\Play.Catalog.Contracts.csproj" />
+    <ProjectReference Include="..\Play.Identity.Contract\Play.Identity.Contract.csproj" />
+    <ProjectReference Include="..\Play.Inventory.Contracts\Play.Inventory.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

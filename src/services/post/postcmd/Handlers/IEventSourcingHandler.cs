@@ -4,5 +4,6 @@
     {
         Task SaveAsync(AggregateRoot aggregateRoot);
         Task<T> GetById(Guid Id);
+        Task RepublishEventAsync();
     }
 }

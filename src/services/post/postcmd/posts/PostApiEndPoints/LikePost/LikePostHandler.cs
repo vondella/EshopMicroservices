@@ -4,7 +4,7 @@ using FluentValidation;
 namespace postcmd.posts.PostApiEndPoints.LikePost
 {
     public record LikePostCommand(Guid Id):ICommand<LikePostResponse>;
-    public record LikePostResponse();
+    public record LikePostResponse(Guid Id,string Message);
     public class LikePostCommandValidator:AbstractValidator<LikePostCommand>
     {
         public LikePostCommandValidator()
@@ -19,7 +19,7 @@ namespace postcmd.posts.PostApiEndPoints.LikePost
             var aggregate =  await  _eventSourcingHandler.GetById(command.Id);
             aggregate.LikePost();
             await _eventSourcingHandler.SaveAsync(aggregate);
-            throw new NotImplementedException();
+            return new LikePostResponse(command.Id, Message: $"A post with id no {command.Id} has been liked successfully");
         }
     }
 }

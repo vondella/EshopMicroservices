@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using FluentValidation;
+using buildingBlock.Responses;
 
 namespace buildingBlock.Exceptions.Handler
 {
@@ -61,7 +62,10 @@ namespace buildingBlock.Exceptions.Handler
             {
                 problemDetails.Extensions.Add("ValidationErrors", validationException.Errors);
             }
-            await context.Response.WriteAsJsonAsync(problemDetails,cancellationToken:cancellationToken);
+            ResponseWrapper<ProblemDetails> responseWrapper = ResponseWrapper<ProblemDetails>.Fail("failed an exceptions occured");
+            responseWrapper.ResponseData = problemDetails;
+            
+            await context.Response.WriteAsJsonAsync(responseWrapper, cancellationToken:cancellationToken);
             return true;
         }
     }

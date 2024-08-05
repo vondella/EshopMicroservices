@@ -1,11 +1,8 @@
-﻿using buildingBlock.CQRS;
-using FluentValidation;
-using postcmd.posts.PostApiEndPoints.AddPost;
-
+﻿
 namespace postcmd.posts.PostApiEndPoints.DeletePost
 {
     public record DeletePostCommand(Guid Id,string Username) : ICommand<DeletePostResponse>;
-    public record DeletePostResponse();
+    public record DeletePostResponse(Guid Id , string Message);
     public class DeletePostCommandValidator : AbstractValidator<DeletePostCommand>
     {
         public DeletePostCommandValidator()
@@ -21,7 +18,7 @@ namespace postcmd.posts.PostApiEndPoints.DeletePost
             aggregate.DeletePost(command.Username);
              await  _eventSourcingHandler.SaveAsync(aggregate);
 
-            throw new NotImplementedException();
+            return new DeletePostResponse(command.Id, command.Username);
         }
     }
 }

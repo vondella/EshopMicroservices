@@ -1,10 +1,4 @@
-﻿
-
-using buildingBlock.Messaging.Events.PostPublishEvents;
-using buildingBlock.Messaging.Producers;
-using MassTransit;
-using Microsoft.Extensions.Options;
-using postcmd.Domains.Aggregates;
+﻿using MassTransit;
 
 namespace postcmd.Infrastracture.Store
 {
@@ -21,6 +15,15 @@ namespace postcmd.Infrastracture.Store
             _publishEndpoint = publishEndpoint;
         }
 
+        public async Task<List<Guid>> GetAggregateIdAsync()
+        {
+            var eventStream = await _eventStoreRepository.FindAllAsync();
+            if (eventStream == null && !eventStream.Any())
+                throw new ArgumentNullException(nameof(eventStream), "colud not retrieve eventstream from event store");
+            return eventStream.Select(x => x.AggregateIdentifier).Distinct().ToList();
+
+        }
+
         public async Task<List<BaseEvent>> GetEventsAsync(Guid aggregateId)
         {
             var eventStream = await _eventStoreRepository.FindByAggregate(aggregateId);
@@ -34,27 +37,27 @@ namespace postcmd.Infrastracture.Store
         {
             var eventStream = await _eventStoreRepository.FindByAggregate(aggregateId);
             if (expectedVersion != -1 && eventStream[^1].Version != expectedVersion)
-                throw new ConcurrencyExecption("");
+                throw new ConcurrencyExecption("concurrency error");
 
             var version = expectedVersion;
-            foreach(var @event in events)
+            foreach (var @event in events)
             {
-                version ++; 
+                version++;
                 @event.Version = version;
                 var eventType = @event.GetType().Name;
                 var eventModel = new EventModel
                 {
-                     Timestamp=DateTime.Now,
-                     AggregateIdentifier=aggregateId,
-                     AggregateType=nameof(PostAggregates),
-                     Version=version,
-                     EventType=eventType,
-                     EvenData=@event
+                    Timestamp = DateTime.Now,
+                    AggregateIdentifier = aggregateId,
+                    AggregateType = nameof(PostAggregates),
+                    Version = version,
+                    EventType = eventType,
+                    EvenData = @event
                 };
                 await _eventStoreRepository.SaveAsync(eventModel);
                 //await PublishEvent.PublishAsync(_publishEndpoint, @event);
-                await _publishEndpoint.Publish(@event);
-                
+                await PublishEvent.PublishAsync(_publishEndpoint,@event);
+
             }
         }
     }

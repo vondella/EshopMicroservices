@@ -4,7 +4,7 @@ using FluentValidation;
 namespace postcmd.posts.PostApiEndPoints.RemovePostComment
 {
     public record RemoveCommentCommand(Guid Id,Guid CommentId,string Username):ICommand<RemoveCommentResponse>;
-    public record RemoveCommentResponse();
+    public record RemoveCommentResponse(Guid CommentId, string Message);
     public class RemoveCommentCommandValidator:AbstractValidator<RemoveCommentCommand>
     {
         public RemoveCommentCommandValidator()
@@ -21,7 +21,7 @@ namespace postcmd.posts.PostApiEndPoints.RemovePostComment
             var aggregate = await _eventSourcingHandler.GetById(command.Id);
             aggregate.RemoveComment(command.CommentId, command.Username);
             await  _eventSourcingHandler.SaveAsync(aggregate);
-            throw new NotImplementedException();
+            return new RemoveCommentResponse(command.CommentId,Message: $"Comment with Id:{command.CommentId} has been removed successfully");
         }
     }
 }
