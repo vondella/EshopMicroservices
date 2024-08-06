@@ -38,6 +38,7 @@ onReset:() =>
 }
 ))
   .AddPolicyHandler(Policy.TimeoutAsync<HttpResponseMessage>(1));
+
 builder.Services.AddInventoryAUthentication();
 builder.Services.AddAuthorization();
 var app = builder.Build();
